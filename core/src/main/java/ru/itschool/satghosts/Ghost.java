@@ -11,7 +11,7 @@ public class Ghost {
     float vx, vy;
 
     public Ghost() {
-        width = MathUtils.random(70, 250);
+        width = MathUtils.random(50, 150);
         height = width*1.756f;
         x = MathUtils.random(0, SCR_WIDTH-width);
         y = MathUtils.random(0, SCR_HEIGHT-height);

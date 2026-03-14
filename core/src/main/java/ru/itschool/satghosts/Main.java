@@ -10,25 +10,32 @@ public class Main extends ApplicationAdapter {
     SpriteBatch batch;
     Texture imgBackGround;
     Texture imgGhost;
-    Ghost ghost;
+    Ghost[] ghosts = new Ghost[100];
 
     @Override
     public void create() {
         batch = new SpriteBatch();
         imgBackGround = new Texture("grave.png");
         imgGhost = new Texture("ghost.png");
-        ghost = new Ghost();
+
+        for (int i = 0; i < ghosts.length; i++) {
+            ghosts[i] = new Ghost();
+        }
+
     }
 
     @Override
     public void render() {
         // события
-        ghost.move();
-
+        for (int i = 0; i < ghosts.length; i++) {
+            ghosts[i].move();
+        }
         // отрисовка
         batch.begin();
         batch.draw(imgBackGround, 0, 0, SCR_WIDTH, SCR_HEIGHT);
-        batch.draw(imgGhost, ghost.x, ghost.y, ghost.width, ghost.height);
+        for (int i = 0; i < ghosts.length; i++) {
+            batch.draw(imgGhost, ghosts[i].x, ghosts[i].y, ghosts[i].width, ghosts[i].height);
+        }
         batch.end();
     }
 
