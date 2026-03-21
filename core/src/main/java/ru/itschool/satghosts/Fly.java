@@ -15,8 +15,8 @@ public class Fly {
         height = width*0.814f;
         x = MathUtils.random(0, SCR_WIDTH-width);
         y = MathUtils.random(0, SCR_HEIGHT-height);
-        vx = MathUtils.random(-5f, 5f);
-        vy = MathUtils.random(-5f, 5f);
+        vx = MathUtils.random(-15f, 15f);
+        vy = MathUtils.random(-15f, 15f);
     }
 
     void move() {

@@ -10,17 +10,22 @@ public class Main extends ApplicationAdapter {
     SpriteBatch batch;
     Texture imgBackGround;
     Texture imgGhost;
+    Texture imgFly;
     Ghost[] ghosts = new Ghost[10];
+    Fly[] flies = new Fly[30];
 
     @Override
     public void create() {
         batch = new SpriteBatch();
         imgBackGround = new Texture("grave.png");
         imgGhost = new Texture("ghost.png");
+        imgFly = new Texture("fly.png");
 
         for (int i = 0; i < ghosts.length; i++) {
             ghosts[i] = new Ghost();
-            i=10;
+        }
+        for (int i = 0; i < flies.length; i++) {
+            flies[i] = new Fly();
         }
     }
 
@@ -30,9 +35,15 @@ public class Main extends ApplicationAdapter {
         for (int i = 0; i < ghosts.length; i++) {
             ghosts[i].move();
         }
+        for (int i = 0; i < flies.length; i++) {
+            flies[i].move();
+        }
         // отрисовка
         batch.begin();
         batch.draw(imgBackGround, 0, 0, SCR_WIDTH, SCR_HEIGHT);
+        for (int i = 0; i < flies.length; i++) {
+            batch.draw(imgFly, flies[i].x, flies[i].y, flies[i].width, flies[i].height);
+        }
         for (int i = 0; i < ghosts.length; i++) {
             batch.draw(imgGhost, ghosts[i].x, ghosts[i].y, ghosts[i].width, ghosts[i].height);
         }
@@ -44,5 +55,6 @@ public class Main extends ApplicationAdapter {
         batch.dispose();
         imgBackGround.dispose();
         imgGhost.dispose();
+        imgFly.dispose();
     }
 }
