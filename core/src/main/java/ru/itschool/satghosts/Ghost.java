@@ -3,6 +3,7 @@ package ru.itschool.satghosts;
 import static ru.itschool.satghosts.Main.*;
 
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector3;
 
 public class Ghost {
     float x, y;
@@ -12,8 +13,10 @@ public class Ghost {
     public Ghost() {
         width = MathUtils.random(50, 150);
         height = width*1.756f;
-        x = MathUtils.random(0, SCR_WIDTH-width);
-        y = MathUtils.random(0, SCR_HEIGHT-height);
+        //x = MathUtils.random(0, SCR_WIDTH-width);
+        //y = MathUtils.random(0, SCR_HEIGHT-height);
+        x = 514;
+        y = 224;
         vx = MathUtils.random(-5f, 5f);
         vy = MathUtils.random(-5f, 5f);
     }
@@ -28,5 +31,9 @@ public class Ghost {
         if(y<0 || y>SCR_HEIGHT-height){
             vy = -vy;
         }
+    }
+
+    boolean hit(Vector3 t){
+        return t.x>x && t.x<x+width && t.y>x && t.y<y+height;
     }
 }
