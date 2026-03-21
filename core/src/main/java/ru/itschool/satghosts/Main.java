@@ -47,13 +47,13 @@ public class Main extends ApplicationAdapter {
             camera.unproject(touch);
             for (int i = 0; i < ghosts.length; i++) {
                 if(ghosts[i].hit(touch)){
-                    System.out.println("потрогали");
+                    ghosts[i].show = false;
                 }
             }
         }
         // события
         for (int i = 0; i < ghosts.length; i++) {
-            ghosts[i].move();
+            if(ghosts[i].show) ghosts[i].move();
         }
         for (int i = 0; i < flies.length; i++) {
             flies[i].move();
@@ -66,7 +66,9 @@ public class Main extends ApplicationAdapter {
             batch.draw(imgFly, flies[i].x, flies[i].y, flies[i].width, flies[i].height);
         }
         for (int i = 0; i < ghosts.length; i++) {
-            batch.draw(imgGhost, ghosts[i].x, ghosts[i].y, ghosts[i].width, ghosts[i].height);
+            if(ghosts[i].show) {
+                batch.draw(imgGhost, ghosts[i].x, ghosts[i].y, ghosts[i].width, ghosts[i].height);
+            }
         }
         batch.end();
     }

@@ -9,6 +9,7 @@ public class Ghost {
     float x, y;
     float width, height;
     float vx, vy;
+    boolean show = true;
 
     public Ghost() {
         width = MathUtils.random(50, 150);
@@ -34,6 +35,6 @@ public class Ghost {
     }
 
     boolean hit(Vector3 t){
-        return t.x>x && t.x<x+width && t.y>x && t.y<y+height;
+        return t.x>x && t.x<x+width && t.y>y && t.y<y+height;
     }
 }
