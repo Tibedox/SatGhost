@@ -10,7 +10,7 @@ public class Main extends ApplicationAdapter {
     SpriteBatch batch;
     Texture imgBackGround;
     Texture imgGhost;
-    Ghost[] ghosts = new Ghost[100];
+    Ghost[] ghosts = new Ghost[10];
 
     @Override
     public void create() {
@@ -20,8 +20,8 @@ public class Main extends ApplicationAdapter {
 
         for (int i = 0; i < ghosts.length; i++) {
             ghosts[i] = new Ghost();
+            i=10;
         }
-
     }
 
     @Override

@@ -1,17 +1,18 @@
 package ru.itschool.satghosts;
 
-import static ru.itschool.satghosts.Main.*;
+import static ru.itschool.satghosts.Main.SCR_HEIGHT;
+import static ru.itschool.satghosts.Main.SCR_WIDTH;
 
 import com.badlogic.gdx.math.MathUtils;
 
-public class Ghost {
+public class Fly {
     float x, y;
     float width, height;
     float vx, vy;
 
-    public Ghost() {
-        width = MathUtils.random(50, 150);
-        height = width*1.756f;
+    public Fly() {
+        width = MathUtils.random(20, 50);
+        height = width*0.814f;
         x = MathUtils.random(0, SCR_WIDTH-width);
         y = MathUtils.random(0, SCR_HEIGHT-height);
         vx = MathUtils.random(-5f, 5f);
