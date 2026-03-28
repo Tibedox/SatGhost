@@ -6,6 +6,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 
 public class Main extends ApplicationAdapter {
@@ -33,7 +34,9 @@ public class Main extends ApplicationAdapter {
         imgBackGround = new Texture("grave.png");
         imgGhost = new Texture("ghost.png");
         imgFly = new Texture("fly.png");
-        sndGhost[0] = Gdx.audio.newSound(Gdx.files.internal("sound/man_death_01.ogg"));
+        for (int i = 0; i < sndGhost.length; i++) {
+            sndGhost[i] = Gdx.audio.newSound(Gdx.files.internal("sound/man_death_" +i/10+i%10+ ".ogg"));
+        }
 
         for (int i = 0; i < ghosts.length; i++) {
             ghosts[i] = new Ghost();
@@ -52,7 +55,7 @@ public class Main extends ApplicationAdapter {
             for (int i = 0; i < ghosts.length; i++) {
                 if (ghosts[i].hit(touch) && ghosts[i].show) {
                     ghosts[i].show = false;
-                    sndGhost[0].play();
+                    sndGhost[MathUtils.random(0, 14)].play();
                 }
             }
         }
