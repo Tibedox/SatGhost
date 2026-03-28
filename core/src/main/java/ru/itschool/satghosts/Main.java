@@ -5,9 +5,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.TimeUtils;
 
 public class Main extends ApplicationAdapter {
     static final float SCR_WIDTH = 1600, SCR_HEIGHT = 900;
@@ -20,9 +22,13 @@ public class Main extends ApplicationAdapter {
     Texture imgGhost;
     Texture imgFly;
     Sound[] sndGhost = new Sound[15];
+    BitmapFont font;
 
     Ghost[] ghosts = new Ghost[10];
     Fly[] flies = new Fly[30];
+
+    int kills = 0;
+    long timeStartGame;
 
     @Override
     public void create() {
@@ -30,6 +36,7 @@ public class Main extends ApplicationAdapter {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, SCR_WIDTH, SCR_HEIGHT);
         touch = new Vector3();
+        font = new BitmapFont(Gdx.files.internal("comic50.fnt"));
 
         imgBackGround = new Texture("grave.png");
         imgGhost = new Texture("ghost.png");
@@ -44,6 +51,7 @@ public class Main extends ApplicationAdapter {
         for (int i = 0; i < flies.length; i++) {
             flies[i] = new Fly();
         }
+        timeStartGame = TimeUtils.millis();
     }
 
     @Override
@@ -56,6 +64,7 @@ public class Main extends ApplicationAdapter {
                 if (ghosts[i].hit(touch) && ghosts[i].show) {
                     ghosts[i].show = false;
                     sndGhost[MathUtils.random(0, 14)].play();
+                    kills++;
                 }
             }
         }
@@ -80,6 +89,7 @@ public class Main extends ApplicationAdapter {
                 batch.draw(imgGhost, ghosts[i].x, ghosts[i].y, ghosts[i].width, ghosts[i].height);
             }
         }
+        font.draw(batch, getTime(), 10, 890);
         batch.end();
     }
 
@@ -92,5 +102,15 @@ public class Main extends ApplicationAdapter {
         for (int i = 0; i < sndGhost.length; i++) {
             sndGhost[i].dispose();
         }
+    }
+
+    String getTime(){
+        long time = TimeUtils.millis() - timeStartGame;
+        long milisec = time%1000/100;
+        long sec = time/1000%60;
+        long min = time/1000/60%60;
+        long hours = time/1000/60/60;
+        String strTime = hours+":"+min/10+min%10+":"+sec/10+sec%10+":"+milisec;
+        return strTime;
     }
 }
