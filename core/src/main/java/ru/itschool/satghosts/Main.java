@@ -2,6 +2,7 @@ package ru.itschool.satghosts;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -9,6 +10,7 @@ import com.badlogic.gdx.math.Vector3;
 
 public class Main extends ApplicationAdapter {
     static final float SCR_WIDTH = 1600, SCR_HEIGHT = 900;
+
     SpriteBatch batch;
     OrthographicCamera camera;
     Vector3 touch;
@@ -16,6 +18,7 @@ public class Main extends ApplicationAdapter {
     Texture imgBackGround;
     Texture imgGhost;
     Texture imgFly;
+    Sound[] sndGhost = new Sound[15];
 
     Ghost[] ghosts = new Ghost[10];
     Fly[] flies = new Fly[30];
@@ -30,6 +33,7 @@ public class Main extends ApplicationAdapter {
         imgBackGround = new Texture("grave.png");
         imgGhost = new Texture("ghost.png");
         imgFly = new Texture("fly.png");
+        sndGhost[0] = Gdx.audio.newSound(Gdx.files.internal("sound/man_death_01.ogg"));
 
         for (int i = 0; i < ghosts.length; i++) {
             ghosts[i] = new Ghost();
@@ -42,22 +46,25 @@ public class Main extends ApplicationAdapter {
     @Override
     public void render() {
         // касания
-        if(Gdx.input.justTouched()){
+        if (Gdx.input.justTouched()) {
             touch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
             camera.unproject(touch);
             for (int i = 0; i < ghosts.length; i++) {
-                if(ghosts[i].hit(touch)){
+                if (ghosts[i].hit(touch) && ghosts[i].show) {
                     ghosts[i].show = false;
+                    sndGhost[0].play();
                 }
             }
         }
+
         // события
         for (int i = 0; i < ghosts.length; i++) {
-            if(ghosts[i].show) ghosts[i].move();
+            if (ghosts[i].show) ghosts[i].move();
         }
         for (int i = 0; i < flies.length; i++) {
             flies[i].move();
         }
+
         // отрисовка
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
@@ -66,7 +73,7 @@ public class Main extends ApplicationAdapter {
             batch.draw(imgFly, flies[i].x, flies[i].y, flies[i].width, flies[i].height);
         }
         for (int i = 0; i < ghosts.length; i++) {
-            if(ghosts[i].show) {
+            if (ghosts[i].show) {
                 batch.draw(imgGhost, ghosts[i].x, ghosts[i].y, ghosts[i].width, ghosts[i].height);
             }
         }
@@ -79,5 +86,8 @@ public class Main extends ApplicationAdapter {
         imgBackGround.dispose();
         imgGhost.dispose();
         imgFly.dispose();
+        for (int i = 0; i < sndGhost.length; i++) {
+            sndGhost[i].dispose();
+        }
     }
 }

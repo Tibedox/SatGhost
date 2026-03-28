@@ -15,4 +15,9 @@ public class Fly extends Ghost{
         vx = MathUtils.random(-15f, 15f);
         vy = MathUtils.random(-15f, 15f);
     }
+
+    @Override
+    void move() {
+        super.move();
+    }
 }
