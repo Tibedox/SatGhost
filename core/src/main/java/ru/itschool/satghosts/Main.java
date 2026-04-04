@@ -68,28 +68,36 @@ public class Main extends ApplicationAdapter {
         if (Gdx.input.justTouched()) {
             touch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
             camera.unproject(touch);
-            for (int i = 0; i < ghosts.length; i++) {
-                if (ghosts[i].hit(touch) && ghosts[i].show) {
-                    ghosts[i].show = false;
-                    sndGhost[MathUtils.random(0, 14)].play();
-                    kills++;
-                    gameOver = true;
-                    for (int j = 0; j < ghosts.length; j++) {
-                        if (ghosts[j].show) {
-                            gameOver = false;
-                        }
-                    }
-                    if(gameOver){
-                        players[players.length-1].set("Zuzu", getTime());
-                        for (int j = 0; j < players.length; j++) {
-                            if(players[j].name.isEmpty()){
-                                players[j].set("LOH", "9:99:99:9");
+            if(gameOver){
+                timeStartGame = TimeUtils.millis();
+                for (int i = 0; i < ghosts.length; i++) {
+                    ghosts[i] = new Ghost();
+                }
+                gameOver = false;
+            } else {
+                for (int i = 0; i < ghosts.length; i++) {
+                    if (ghosts[i].hit(touch) && ghosts[i].show) {
+                        ghosts[i].show = false;
+                        sndGhost[MathUtils.random(0, 14)].play();
+                        kills++;
+                        gameOver = true;
+                        for (int j = 0; j < ghosts.length; j++) {
+                            if (ghosts[j].show) {
+                                gameOver = false;
                             }
                         }
-                        Arrays.sort(players, new MyComparator());
-                        for (int j = 0; j < players.length; j++) {
-                            if(players[j].name == "LOH"){
-                                players[j].set("", "");
+                        if (gameOver) {
+                            players[players.length - 1].set("Zuzu", getTime());
+                            for (int j = 0; j < players.length; j++) {
+                                if (players[j].name.isEmpty()) {
+                                    players[j].set("LOH", "9:99:99:9");
+                                }
+                            }
+                            Arrays.sort(players, new MyComparator());
+                            for (int j = 0; j < players.length; j++) {
+                                if (players[j].name == "LOH") {
+                                    players[j].set("", "");
+                                }
                             }
                         }
                     }
