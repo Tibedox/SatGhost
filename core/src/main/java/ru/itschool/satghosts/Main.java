@@ -11,6 +11,8 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.TimeUtils;
 
+import java.util.Arrays;
+
 public class Main extends ApplicationAdapter {
     static final float SCR_WIDTH = 1600, SCR_HEIGHT = 900;
 
@@ -24,12 +26,14 @@ public class Main extends ApplicationAdapter {
     Sound[] sndGhost = new Sound[15];
     BitmapFont font;
 
-    Ghost[] ghosts = new Ghost[10];
+    Ghost[] ghosts = new Ghost[3];
     Fly[] flies = new Fly[30];
+    Player[] players = new Player[5];
 
     int kills;
     long timeStartGame;
     String strTime;
+    boolean gameOver;
 
     @Override
     public void create() {
@@ -52,6 +56,9 @@ public class Main extends ApplicationAdapter {
         for (int i = 0; i < flies.length; i++) {
             flies[i] = new Fly();
         }
+        for (int i = 0; i < players.length; i++) {
+            players[i] = new Player();
+        }
         timeStartGame = TimeUtils.millis();
     }
 
@@ -66,6 +73,26 @@ public class Main extends ApplicationAdapter {
                     ghosts[i].show = false;
                     sndGhost[MathUtils.random(0, 14)].play();
                     kills++;
+                    gameOver = true;
+                    for (int j = 0; j < ghosts.length; j++) {
+                        if (ghosts[j].show) {
+                            gameOver = false;
+                        }
+                    }
+                    if(gameOver){
+                        players[players.length-1].set("Zuzu", getTime());
+                        for (int j = 0; j < players.length; j++) {
+                            if(players[j].name.isEmpty()){
+                                players[j].set("LOH", "9:99:99:9");
+                            }
+                        }
+                        Arrays.sort(players, new MyComparator());
+                        for (int j = 0; j < players.length; j++) {
+                            if(players[j].name == "LOH"){
+                                players[j].set("", "");
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -77,12 +104,7 @@ public class Main extends ApplicationAdapter {
         for (int i = 0; i < flies.length; i++) {
             flies[i].move();
         }
-        boolean gameOver = true;
-        for (int i = 0; i < ghosts.length; i++) {
-            if (ghosts[i].show) {
-                gameOver = false;
-            }
-        }
+
         if(!gameOver) {
             strTime = getTime();
         }
@@ -100,6 +122,12 @@ public class Main extends ApplicationAdapter {
             }
         }
         font.draw(batch, strTime, 10, 890);
+        if(gameOver){
+            for (int i = 0; i < players.length; i++) {
+                font.draw(batch, players[i].name, 500, 600-i*80);
+                font.draw(batch, players[i].time, 800, 600-i*80);
+            }
+        }
         batch.end();
     }
 
