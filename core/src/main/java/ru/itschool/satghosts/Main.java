@@ -27,8 +27,9 @@ public class Main extends ApplicationAdapter {
     Ghost[] ghosts = new Ghost[10];
     Fly[] flies = new Fly[30];
 
-    int kills = 0;
+    int kills;
     long timeStartGame;
+    String strTime;
 
     @Override
     public void create() {
@@ -76,6 +77,15 @@ public class Main extends ApplicationAdapter {
         for (int i = 0; i < flies.length; i++) {
             flies[i].move();
         }
+        boolean gameOver = true;
+        for (int i = 0; i < ghosts.length; i++) {
+            if (ghosts[i].show) {
+                gameOver = false;
+            }
+        }
+        if(!gameOver) {
+            strTime = getTime();
+        }
 
         // отрисовка
         batch.setProjectionMatrix(camera.combined);
@@ -89,7 +99,7 @@ public class Main extends ApplicationAdapter {
                 batch.draw(imgGhost, ghosts[i].x, ghosts[i].y, ghosts[i].width, ghosts[i].height);
             }
         }
-        font.draw(batch, getTime(), 10, 890);
+        font.draw(batch, strTime, 10, 890);
         batch.end();
     }
 
@@ -110,7 +120,6 @@ public class Main extends ApplicationAdapter {
         long sec = time/1000%60;
         long min = time/1000/60%60;
         long hours = time/1000/60/60;
-        String strTime = hours+":"+min/10+min%10+":"+sec/10+sec%10+":"+milisec;
-        return strTime;
+        return hours+":"+min/10+min%10+":"+sec/10+sec%10+":"+milisec;
     }
 }
