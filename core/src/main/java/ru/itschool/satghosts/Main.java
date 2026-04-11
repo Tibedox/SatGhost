@@ -69,36 +69,14 @@ public class Main extends ApplicationAdapter {
             touch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
             camera.unproject(touch);
             if(gameOver){
-                timeStartGame = TimeUtils.millis();
-                for (int i = 0; i < ghosts.length; i++) {
-                    ghosts[i] = new Ghost();
-                }
-                gameOver = false;
+                restartGame();
             } else {
                 for (int i = 0; i < ghosts.length; i++) {
                     if (ghosts[i].hit(touch) && ghosts[i].show) {
-                        ghosts[i].show = false;
-                        sndGhost[MathUtils.random(0, 14)].play();
-                        kills++;
-                        gameOver = true;
-                        for (int j = 0; j < ghosts.length; j++) {
-                            if (ghosts[j].show) {
-                                gameOver = false;
-                            }
-                        }
-                        if (gameOver) {
-                            players[players.length - 1].set("Zuzu", getTime());
-                            for (int j = 0; j < players.length; j++) {
-                                if (players[j].name.isEmpty()) {
-                                    players[j].set("LOH", "9:99:99:9");
-                                }
-                            }
-                            Arrays.sort(players, new MyComparator());
-                            for (int j = 0; j < players.length; j++) {
-                                if (players[j].name == "LOH") {
-                                    players[j].set("", "");
-                                }
-                            }
+                        killGhost(i);
+                        gameOver = isTheGameOver();
+                        if(gameOver) {
+                            sortTableOfRecords();
                         }
                     }
                 }
@@ -131,10 +109,7 @@ public class Main extends ApplicationAdapter {
         }
         font.draw(batch, strTime, 10, 890);
         if(gameOver){
-            for (int i = 0; i < players.length; i++) {
-                font.draw(batch, players[i].name, 500, 600-i*80);
-                font.draw(batch, players[i].time, 800, 600-i*80);
-            }
+            showTableOfRecords();
         }
         batch.end();
     }
@@ -157,5 +132,55 @@ public class Main extends ApplicationAdapter {
         long min = time/1000/60%60;
         long hours = time/1000/60/60;
         return hours+":"+min/10+min%10+":"+sec/10+sec%10+":"+milisec;
+    }
+
+    void restartGame() {
+        timeStartGame = TimeUtils.millis();
+        for (int i = 0; i < ghosts.length; i++) {
+            ghosts[i] = new Ghost();
+        }
+        gameOver = false;
+    }
+
+    void killGhost(int i) {
+        ghosts[i].show = false;
+        sndGhost[MathUtils.random(0, 14)].play();
+        kills++;
+    }
+
+    boolean isTheGameOver(){
+        gameOver = true;
+        for (int j = 0; j < ghosts.length; j++) {
+            if (ghosts[j].show) {
+                gameOver = false;
+            }
+        }
+        return gameOver;
+    }
+
+    void showTableOfRecords() {
+        for (int i = 0; i < players.length; i++) {
+            font.draw(batch, players[i].name, 500, 600-i*80);
+            font.draw(batch, players[i].time, 800, 600-i*80);
+        }
+    }
+    void sortTableOfRecords() {
+        if(!players[players.length-1].time.isEmpty()) {
+            if (getTime().compareTo(players[players.length - 1].time) > 0) {
+                return;
+            }
+        }
+        players[players.length - 1].set("Zuzu", getTime());
+        for (int j = 0; j < players.length; j++) {
+            if (players[j].name.isEmpty()) {
+                players[j].set("LOH", "9:99:99:9");
+            }
+        }
+        Arrays.sort(players, new MyComparator());
+        for (int j = 0; j < players.length; j++) {
+            if (players[j].name == "LOH") {
+                players[j].set("", "");
+            }
+        }
     }
 }
