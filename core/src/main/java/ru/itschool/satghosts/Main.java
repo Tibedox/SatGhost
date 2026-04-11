@@ -29,6 +29,7 @@ public class Main extends ApplicationAdapter {
     Ghost[] ghosts = new Ghost[3];
     Fly[] flies = new Fly[30];
     Player[] players = new Player[5];
+    MyButton btnRestart;
 
     int kills;
     long timeStartGame;
@@ -50,6 +51,7 @@ public class Main extends ApplicationAdapter {
             sndGhost[i] = Gdx.audio.newSound(Gdx.files.internal("sound/man_death_" +i/10+i%10+ ".ogg"));
         }
 
+        btnRestart = new MyButton(680, 150, font, "RESTART");
         for (int i = 0; i < ghosts.length; i++) {
             ghosts[i] = new Ghost();
         }
@@ -69,7 +71,9 @@ public class Main extends ApplicationAdapter {
             touch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
             camera.unproject(touch);
             if(gameOver){
-                restartGame();
+                if(btnRestart.hit(touch)) {
+                    restartGame();
+                }
             } else {
                 for (int i = 0; i < ghosts.length; i++) {
                     if (ghosts[i].hit(touch) && ghosts[i].show) {
@@ -110,6 +114,7 @@ public class Main extends ApplicationAdapter {
         font.draw(batch, strTime, 10, 890);
         if(gameOver){
             showTableOfRecords();
+            btnRestart.font.draw(batch, btnRestart.text, btnRestart.x, btnRestart.y);
         }
         batch.end();
     }
